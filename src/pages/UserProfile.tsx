@@ -10,10 +10,13 @@ import { getOrdinalSuffix } from '../utils/getOrdinalSuffix';
 import { uploadImage } from '../utils/imageUpload';
 import '../styles/General.css';
 import '../styles/UserProfile.css';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const MIN_DIMENSION = 200;
 const MAX_DIMENSION = 1000;
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png'];
 
 const UserProfilePage: React.FC = () => {
 
@@ -53,7 +56,7 @@ const UserProfilePage: React.FC = () => {
   };
 
   const generateNewAvatar = () => {
-    const newSeed = Math.random().toString(36).substring(7);
+    const newSeed = Math.random().toString(36).substring(9);
     setAvatarSeed(newSeed);
     setImagePreview(null);
     setUploadedImage(null);
@@ -61,7 +64,46 @@ const UserProfilePage: React.FC = () => {
     clearError();
   };
 
-  const validateFile = (file: File): Promise<boolean> => {
+  const checkMagicNumbers = (file: File): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = function(e) {
+      if (e.target?.readyState === FileReader.DONE) {
+        const arr = new Uint8Array(e.target.result as ArrayBuffer).subarray(0, 4);
+        let header = '';
+        for (let i = 0; i < arr.length; i++) {
+          header += arr[i].toString(16);
+        }
+        // Check for JPEG or PNG headers
+        const isValid = header.startsWith('ffd8') || header === '89504e47';
+        resolve(isValid);
+      }
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4));
+    });
+  };
+
+  const validateFile = async (file: File): Promise<boolean> => {
+    // Check file type
+    if (!ALLOWED_FILE_TYPES.includes(file.type.toLowerCase())) {
+      console.log('Invalid file type');
+      return false;
+    }
+
+    // Check magic numbers
+    const isValidMagicNumber = await checkMagicNumbers(file);
+    if (!isValidMagicNumber) {
+      console.log('Invalid file content');
+      return false;
+    }
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      console.log('File too large');
+      return false;
+    }
+
+    // Check image dimensions
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -69,13 +111,17 @@ const UserProfilePage: React.FC = () => {
         const img = new Image();
         img.src = e.target?.result as string;
         img.onload = () => {
-          const valid = 
-            file.size <= MAX_FILE_SIZE &&
+          const isValidDimensions = 
             img.width >= MIN_DIMENSION &&
             img.height >= MIN_DIMENSION &&
             img.width <= MAX_DIMENSION &&
             img.height <= MAX_DIMENSION;
-          resolve(valid);
+          
+          if (!isValidDimensions) {
+            console.log('Invalid image dimensions');
+          }
+          
+          resolve(isValidDimensions);
         };
       };
     });
@@ -84,7 +130,7 @@ const UserProfilePage: React.FC = () => {
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      clearError();
+      setError(null); // Clear any previous errors
       const isValid = await validateFile(file);
       if (isValid) {
         setUploadedImage(file);
@@ -94,7 +140,7 @@ const UserProfilePage: React.FC = () => {
         };
         reader.readAsDataURL(file);
       } else {
-        setError(`Invalid file. Please ensure your image is between ${MIN_DIMENSION}x${MIN_DIMENSION} and ${MAX_DIMENSION}x${MAX_DIMENSION} pixels, and no larger than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`);
+        setError(`Invalid file. Please ensure your image is a JPG or PNG file, between ${MIN_DIMENSION}x${MIN_DIMENSION} and ${MAX_DIMENSION}x${MAX_DIMENSION} pixels, and no larger than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`);
       }
     }
   };
@@ -146,11 +192,11 @@ const renderProfileImage = () => {
   }
 };
 
-  if (loading || dataLoading) return <div className="page-container">Loading...</div>;
-  if (dataError) return <div className="page-container">Error: {dataError}</div>;
+  if (loading || dataLoading) return <div className="user-profile"><LoadingSpinner/></div>;
+  if (dataError) return <div className="user-profile"><ErrorMessage message={dataError}/></div>;
 
   return (
-    <div className="page-container user-profile">
+    <div className="user-profile">
       <h1>User Profile</h1>
       <button onClick={toggleEditMode}>
         {editMode ? 'Cancel Edit' : 'Edit Profile'}
@@ -161,13 +207,15 @@ const renderProfileImage = () => {
           <>
             <input
               type="file"
-              accept="image/*"
+              accept="image/jpeg, image/jpg, image/png"
               onChange={handleImageUpload}
               style={{ display: 'none' }}
               ref={fileInputRef}
             />
-            <button onClick={() => fileInputRef.current?.click()}>Upload Image</button>
-            <button onClick={generateNewAvatar}>Generate New Avatar</button>
+            <div className="profile-image-buttons">
+              <button onClick={() => fileInputRef.current?.click()}>Upload Image</button>
+              <button onClick={generateNewAvatar}>Generate Avatar</button>
+            </div>
           </>
         )}
       </div>

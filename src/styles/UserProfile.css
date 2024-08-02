@@ -1,15 +1,13 @@
-.user-profile {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
 .avatar-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto 20px;
-    max-width: 250px;
+    margin-bottom: 20px;
+}
+
+.avatar-section img {
+    max-width: 420px;
+    margin-bottom: 20px;
 }
 
 .profile-info {
@@ -21,6 +19,12 @@
     width: 150px;
     height: 150px;
     margin-bottom: 10px;
+}
+
+.user-profile form,
+.error-message {
+    max-width: 420px;
+    margin: 0 auto 20px;
 }
 
 .user-profile form div {
@@ -57,14 +61,4 @@
 
 .user-profile button:hover {
     background-color: #45a049;
-}
-
-.error-message {
-    color: #721c24;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 15px;
-    text-align: center;
 }

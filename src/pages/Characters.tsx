@@ -117,7 +117,6 @@ const Characters: React.FC = () => {
               key={character.id} 
               onClick={() => handleCharacterClick(character)}
               ref={index === displayedCharacters.length - 1 ? lastElementRef : null}
-              style={index === displayedCharacters.length - 1 ? { border: '2px solid red' } : {}}
             >
               <CharacterCard character={character} />
             </div>

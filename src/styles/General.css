@@ -22,6 +22,11 @@ body {
     padding: 20px;
 }
 
+main > div {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 h1,
 h2,
 h3 {
