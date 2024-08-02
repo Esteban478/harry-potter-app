@@ -1,0 +1,64 @@
+.home {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Garamond', sans-serif;
+}
+
+.home h1 {
+    color: #740001;
+    /* Gryffindor red */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.daily-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.character-of-the-day,
+.spell-of-the-day {
+    width: 48%;
+    background-color: #eeba30;
+    /* Hufflepuff yellow */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.character-of-the-day h2,
+.spell-of-the-day h2 {
+    color: #000000;
+    margin-top: 0;
+}
+
+.character-of-the-day img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.character-of-the-day p,
+.spell-of-the-day p {
+    margin: 5px 0;
+}
+
+.spell-of-the-day {
+    background-color: #222f5b;
+    /* Ravenclaw blue */
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .daily-section {
+        flex-direction: column;
+    }
+
+    .character-of-the-day,
+    .spell-of-the-day {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}

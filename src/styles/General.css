@@ -1,0 +1,71 @@
+:root {
+    --gryffindor-red: #740001;
+    --gryffindor-gold: #d3a625;
+    --slytherin-green: #1a472a;
+    --slytherin-silver: #5d5d5d;
+    --ravenclaw-blue: #222f5b;
+    --ravenclaw-bronze: #946b2d;
+    --hufflepuff-yellow: #ecb939;
+    --hufflepuff-black: #372e29;
+}
+
+body {
+    font-family: 'Garramond', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--gryffindor-red);
+}
+
+button {
+    background-color: var(--ravenclaw-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--gryffindor-red);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--slytherin-silver);
+    border-radius: 5px;
+}
+
+.error-message {
+    color: var(--gryffindor-red);
+    background-color: #ffeeee;
+    border: 1px solid var(--gryffindor-red);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.success-message {
+    color: var(--slytherin-green);
+    background-color: #eeffee;
+    border: 1px solid var(--slytherin-green);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}

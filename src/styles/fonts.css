@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Garamond';
+    src: url('./assets/EB_Garamond/EBGaramond-VariableFont_wght.ttf') format('woff2'),
+        url('./assets/EB_Garamond/EBGaramond-VariableFont_wght.ttf') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Add more @font-face declarations for different weights/styles if needed */

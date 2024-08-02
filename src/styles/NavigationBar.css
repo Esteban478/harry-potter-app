@@ -1,0 +1,30 @@
+.navigation-bar {
+    background-color: #1a472a;
+    /* Slytherin green */
+    padding: 1rem;
+}
+
+.navigation-bar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navigation-bar li {
+    display: inline;
+}
+
+.navigation-bar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.navigation-bar a:hover {
+    color: #ffd700;
+    /* Gold */
+}
