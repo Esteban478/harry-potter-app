@@ -11,7 +11,12 @@ import { uploadImage } from '../utils/imageUpload';
 import '../styles/General.css';
 import '../styles/UserProfile.css';
 
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const MIN_DIMENSION = 200;
+const MAX_DIMENSION = 1000;
+
 const UserProfilePage: React.FC = () => {
+
   const { userProfile, updateUserProfile } = useUser();
   const { characters, spells, options, loading: dataLoading, error: dataError } = useData();
   const [editedProfile, setEditedProfile] = useState<Partial<UserProfile>>({});
@@ -22,6 +27,7 @@ const UserProfilePage: React.FC = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (userProfile) {
@@ -42,16 +48,8 @@ const UserProfilePage: React.FC = () => {
     setEditedProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setUploadedImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const clearError = () => {
+    setError(null);
   };
 
   const generateNewAvatar = () => {
@@ -60,31 +58,81 @@ const UserProfilePage: React.FC = () => {
     setImagePreview(null);
     setUploadedImage(null);
     setEditedProfile(prev => ({ ...prev, profilePicture: null }));
+    clearError();
+  };
+
+  const validateFile = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target?.result as string;
+        img.onload = () => {
+          const valid = 
+            file.size <= MAX_FILE_SIZE &&
+            img.width >= MIN_DIMENSION &&
+            img.height >= MIN_DIMENSION &&
+            img.width <= MAX_DIMENSION &&
+            img.height <= MAX_DIMENSION;
+          resolve(valid);
+        };
+      };
+    });
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      clearError();
+      const isValid = await validateFile(file);
+      if (isValid) {
+        setUploadedImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setError(`Invalid file. Please ensure your image is between ${MIN_DIMENSION}x${MIN_DIMENSION} and ${MAX_DIMENSION}x${MAX_DIMENSION} pixels, and no larger than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    clearError();
     let imageUrl = editedProfile.profilePicture;
     if (uploadedImage && userProfile) {
-      imageUrl = await uploadImage(uploadedImage, userProfile.uid);
+      try {
+        imageUrl = await uploadImage(uploadedImage, userProfile.uid);
+      } catch (error) {
+        setError('Failed to upload image. Please try again.');
+        return;
+      }
     } else if (avatarSvg) {
       imageUrl = avatarSvg;
     }
-    await updateUserProfile({ ...editedProfile, profilePicture: imageUrl });
-    setEditMode(false);
-    alert('Profile updated successfully!');
-  };
-
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-    if (editMode) {
-      // Reset to original profile when cancelling edit
-      setEditedProfile(userProfile || {});
-      setAvatarSeed(userProfile?.profilePicture || '');
-      setImagePreview(null);
-      setUploadedImage(null);
+    try {
+      await updateUserProfile({ ...editedProfile, profilePicture: imageUrl });
+      setEditMode(false);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      setError('Failed to update profile. Please try again.');
     }
   };
+
+const toggleEditMode = () => {
+  setEditMode(!editMode);
+  if (editMode) {
+    // Reset to original profile when cancelling edit
+    setEditedProfile(userProfile || {});
+    setAvatarSeed(userProfile?.profilePicture || '');
+    setImagePreview(null);
+    setUploadedImage(null);
+    clearError(); // Clear any error messages
+  }
+};
 
 const renderProfileImage = () => {
   if (imagePreview) {
@@ -123,6 +171,7 @@ const renderProfileImage = () => {
           </>
         )}
       </div>
+      {error && <div className="error-message">{error}</div>}
       {editMode ? (
         <form onSubmit={handleSubmit}>
           <div>
