@@ -47,7 +47,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
         userProfile.uid,
         userProfile.nickname || 'Anonymous',
         newComment,
-        userProfile.profilePicture || '../public/placeholder-wizard.png'
+        userProfile.profilePicture || '/placeholder-wizard.png'
       );
       setNewComment('');
       fetchComments();

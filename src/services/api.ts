@@ -1,8 +1,9 @@
 import { db } from '../config/firebase';
-import { collection, addDoc, getDocs, query, where, orderBy, Timestamp, deleteDoc, doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
-import { Character, Spell, Options, DailyData, Comment } from '../types';
+import { collection, addDoc, getDocs, query, where, orderBy, Timestamp, deleteDoc, doc, updateDoc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
+import { Character, Spell, Options, DailyData, Comment, Potion } from '../types';
 
 const API_BASE_URL = 'https://hp-api.onrender.com/api';
+const POTTERDB_API_BASE_URL = 'https://api.potterdb.com/v1';
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 async function getCachedData<T>(
@@ -148,4 +149,46 @@ export const updateComment = async (commentId: string, content: string) => {
 export const deleteComment = async (commentId: string) => {
   const commentRef = doc(db, 'comments', commentId);
   return deleteDoc(commentRef);
+};
+
+export const fetchPotions = async (): Promise<Potion[]> => {
+  console.log('Fetching potions from API...');
+  const response = await fetch(`${POTTERDB_API_BASE_URL}/potions`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch potions');
+  }
+  const data = await response.json();
+  console.log('Fetched potions:', data.data);
+  return data.data as Potion[];
+};
+
+export const fetchPotionById = async (id: string): Promise<Potion> => {
+  console.log('Fetching potion from API...');
+  const response = await fetch(`${POTTERDB_API_BASE_URL}/potions/${id}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch potion');
+  }
+  const data = await response.json();
+  console.log('Fetched potion:', data.data);
+  return data.data as Potion;
+};
+
+export const storePotionsInFirestore = async (potions: Potion[]): Promise<void> => {
+  console.log('Storing potions in Firestore...');
+  const batch = writeBatch(db);
+  potions.forEach((potion) => {
+    const potionRef = doc(db, 'potions', potion.id);
+    batch.set(potionRef, potion);
+  });
+  await batch.commit();
+  console.log('Potions stored in Firestore');
+};
+
+export const getPotionsFromFirestore = async (): Promise<Potion[]> => {
+  console.log('Getting potions from Firestore...');
+  const potionsRef = collection(db, 'potions');
+  const snapshot = await getDocs(potionsRef);
+  const potions = snapshot.docs.map(doc => doc.data() as Potion);
+  console.log('Potions from Firestore:', potions);
+  return potions;
 };

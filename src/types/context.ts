@@ -1,4 +1,4 @@
-import { Character, Options, Spell, UserProfile } from ".";
+import { Character, Options, Potion, Spell, UserProfile } from ".";
 import { User } from 'firebase/auth';
 
 
@@ -9,6 +9,8 @@ export interface AppContextType {
   setSpells: React.Dispatch<React.SetStateAction<Spell[]>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  potions: Potion[];
+  setPotions: React.Dispatch<React.SetStateAction<Potion[]>>;
 }
 
 export interface AuthContextType {
@@ -19,6 +21,7 @@ export interface AuthContextType {
 export interface DataContextType {
   characters: Character[];
   spells: Spell[];
+  potions: Potion[];
   options: Options | null;
   loading: boolean;
   error: string | null;

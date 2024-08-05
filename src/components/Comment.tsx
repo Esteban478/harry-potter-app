@@ -31,7 +31,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onUpdate }) => {
     <div className="comment">
       <div className="comment-header">
         <img 
-          src={comment.userProfilePicture || '/public/placeholder-wizard.png'} 
+          src={comment.userProfilePicture || '/placeholder-wizard.png'} 
           alt={`${comment.userNickname}'s avatar`} 
           className="comment-avatar"
         />

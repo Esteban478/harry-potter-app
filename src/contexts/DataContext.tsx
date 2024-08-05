@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
-import { Character, Spell, Options } from '../types';
-import { fetchCharacters, fetchSpells, fetchOptions } from '../services/api';
+import { Character, Spell, Options, Potion } from '../types';
+import { fetchCharacters, fetchSpells, fetchOptions, fetchPotions } from '../services/api';
 import { DataContextType } from '../types/context';
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -8,6 +8,7 @@ export const DataContext = createContext<DataContextType | undefined>(undefined)
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [spells, setSpells] = useState<Spell[]>([]);
+  const [potions, setPotions] = useState<Potion[]>([]);
   const [options, setOptions] = useState<Options | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,13 +16,15 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [fetchedCharacters, fetchedSpells, fetchedOptions] = await Promise.all([
+        const [fetchedCharacters, fetchedSpells, fetchedPotions, fetchedOptions] = await Promise.all([
           fetchCharacters(),
           fetchSpells(),
+          fetchPotions(),
           fetchOptions()
         ]);
         setCharacters(fetchedCharacters);
         setSpells(fetchedSpells);
+        setPotions(fetchedPotions);
         setOptions(fetchedOptions);
       } catch (err) {
         setError('Failed to fetch data');
@@ -34,7 +37,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   return (
-    <DataContext.Provider value={{ characters, spells, options, loading, error }}>
+    <DataContext.Provider value={{ characters, spells, potions, options, loading, error }}>
       {children}
     </DataContext.Provider>
   );

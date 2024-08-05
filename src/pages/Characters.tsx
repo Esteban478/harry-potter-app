@@ -9,6 +9,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { Character } from '../types';
 import '../styles/General.css';
 import '../styles/Characters.css';
+import '../styles/DetailPage.css';
 
 const CHARACTERS_PER_PAGE = 20;
 

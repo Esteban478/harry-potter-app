@@ -3,15 +3,16 @@ import NavigationBar from './components/NavigationBar';
 import Home from './pages/Home';
 import Characters from './pages/Characters';
 import Spellbook from './pages/Spellbook';
+import Potions from './pages/Potions';
 import Auth from './pages/Auth';
-import UserProfilePage from './pages/UserProfile';
+import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AppProvider } from './contexts/AppContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import { DataProvider } from './contexts/DataContext';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <AuthProvider>
       <UserProvider>
@@ -25,10 +26,11 @@ const App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/characters" element={<Characters />} />
                     <Route path="/spellbook" element={<Spellbook />} />
+                    <Route path="/potions" element={<Potions />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/profile" element={
                       <ProtectedRoute>
-                        <UserProfilePage />
+                        <UserProfile />
                       </ProtectedRoute>
                     } />
                   </Routes>

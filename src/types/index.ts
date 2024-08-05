@@ -75,3 +75,21 @@ export interface Comment {
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
+
+export interface Potion {
+  id: string;
+  attributes: {
+    name: string;
+    effect?: string;
+    ingredients?: string;
+    characteristics?: string;
+    difficulty?: string;
+    slug?: string;
+    image?: string | null;
+    inventors?: string[] | null;
+    manufacturers?: string[] | null;
+    side_effects?: string | null;
+    time?: string | null;
+    wiki?: string;
+  };
+}
