@@ -20,8 +20,8 @@ const NavigationBar: React.FC = () => {
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/characters">Characters</Link></li>
-        <li><Link to="/spellbook">Spellbook</Link></li>
         <li><Link to="/potions">Potions</Link></li>
+        <li><Link to="/spellbook">Spellbook</Link></li>
         {userProfile ? (
           <>
             <li><Link to="/profile">Profile</Link></li>

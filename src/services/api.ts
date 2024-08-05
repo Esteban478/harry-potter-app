@@ -73,17 +73,20 @@ export const fetchDailyData = async (): Promise<DailyData> => {
   }
 };
 
-const generateNewDailyData = async (): Promise<DailyData> => {
+export const generateNewDailyData = async (): Promise<DailyData> => {
   const characters = await fetchCharacters();
   const spells = await fetchSpells();
+  const potions = await fetchPotions();
 
   const mainCharacters = characters.filter(char => char.image);
   const randomCharacter = mainCharacters[Math.floor(Math.random() * mainCharacters.length)];
   const randomSpell = spells[Math.floor(Math.random() * spells.length)];
+  const randomPotion = potions[Math.floor(Math.random() * potions.length)];
 
   return {
     character: randomCharacter,
     spell: randomSpell,
+    potion: randomPotion,
     date: new Date().toISOString().split('T')[0],
   };
 };

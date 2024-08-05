@@ -62,6 +62,7 @@ export interface Options {
 export interface DailyData {
   character: Character;
   spell: Spell;
+  potion: Potion;
   date: string;
 }
 
