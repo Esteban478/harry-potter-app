@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUserContext';
-import { updateComment, deleteComment } from '../services/api';
-import { Comment as CommentType } from '../types';
-import '../styles/Comments.css';
+import { updateComment, deleteComment, fetchUserProfile } from '../services/api';
+import { Comment as CommentType, UserProfile } from '../types';
 
 interface CommentProps {
   comment: CommentType;
@@ -13,6 +12,15 @@ const Comment: React.FC<CommentProps> = ({ comment, onUpdate }) => {
   const { userProfile } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
+  const [commentUserProfile, setCommentUserProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const profile = await fetchUserProfile(comment.userId);
+      setCommentUserProfile(profile);
+    };
+    fetchProfile();
+  }, [comment.userId]);
 
   const handleEdit = async () => {
     await updateComment(comment.id, editedContent);
@@ -31,12 +39,12 @@ const Comment: React.FC<CommentProps> = ({ comment, onUpdate }) => {
     <div className="comment">
       <div className="comment-header">
         <img 
-          src={comment.userProfilePicture || '/placeholder-wizard.png'} 
-          alt={`${comment.userNickname}'s avatar`} 
+          src={commentUserProfile?.profilePicture || '/placeholder-avatar.jpg'} 
+          alt={`${commentUserProfile?.nickname || 'User'}'s avatar`} 
           className="comment-avatar"
         />
         <div className="comment-info">
-          <strong>{comment.userNickname}</strong>
+          <strong>{commentUserProfile?.nickname || 'Anonymous'}</strong>
           <span>{comment.createdAt.toDate().toLocaleString()}</span>
         </div>
       </div>

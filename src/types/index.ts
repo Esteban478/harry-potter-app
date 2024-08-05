@@ -68,10 +68,9 @@ export interface DailyData {
 
 export interface Comment {
   id: string;
-  characterId: string;
+  characterId?: string;
+  potionId?: string;
   userId: string;
-  userNickname: string;
-  userProfilePicture: string;
   content: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;

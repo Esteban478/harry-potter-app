@@ -3,7 +3,7 @@ import { useUser } from '../hooks/useUserContext';
 import { addComment, getComments } from '../services/api';
 import Comment from './Comment';
 import { Comment as CommentType } from '../types';
-import NoComments from './NoComments';
+import '../styles/Comments.css';
 
 interface CommentSectionProps {
   characterId: string;
@@ -17,38 +17,26 @@ const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('CommentSection mounted, characterId:', characterId);
     fetchComments();
   }, [characterId]);
 
   const fetchComments = async () => {
-    console.log('Fetching comments...');
     try {
       const fetchedComments = await getComments(characterId);
-      console.log('Fetched comments:', fetchedComments);
       setComments(fetchedComments);
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching comments:', err);
       setError('Failed to load comments');
       setLoading(false);
     }
   };
-
-  console.log('Render - loading:', loading, 'error:', error, 'comments:', comments);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userProfile) return;
 
     try {
-      await addComment(
-        characterId,
-        userProfile.uid,
-        userProfile.nickname || 'Anonymous',
-        newComment,
-        userProfile.profilePicture || '/placeholder-wizard.png'
-      );
+      await addComment(newComment, userProfile.uid, characterId);
       setNewComment('');
       fetchComments();
     } catch (err) {
@@ -73,17 +61,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
           <button type="submit">Post Comment</button>
         </form>
       )}
-      {comments.length > 0 ? (
-        comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            onUpdate={fetchComments}
-          />
-        ))
-      ) : (
-        <NoComments />
-      )}
+      {comments.map((comment) => (
+        <Comment
+          key={comment.id}
+          comment={comment}
+          onUpdate={fetchComments}
+        />
+      ))}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { db } from '../config/firebase';
 import { collection, addDoc, getDocs, query, where, orderBy, Timestamp, deleteDoc, doc, updateDoc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
-import { Character, Spell, Options, DailyData, Comment, Potion } from '../types';
+import { Character, Spell, Options, DailyData, Comment, Potion, UserProfile } from '../types';
 
 const API_BASE_URL = 'https://hp-api.onrender.com/api';
 const POTTERDB_API_BASE_URL = 'https://api.potterdb.com/v1';
@@ -73,6 +73,23 @@ export const fetchDailyData = async (): Promise<DailyData> => {
   }
 };
 
+export const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
+  try {
+    const userDocRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userDocRef);
+    
+    if (userDoc.exists()) {
+      return userDoc.data() as UserProfile;
+    } else {
+      console.log(`No user found with ID: ${userId}`);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw error;
+  }
+};
+
 export const generateNewDailyData = async (): Promise<DailyData> => {
   const characters = await fetchCharacters();
   const spells = await fetchSpells();
@@ -92,19 +109,17 @@ export const generateNewDailyData = async (): Promise<DailyData> => {
 };
 
 export const addComment = async (
-  characterId: string,
-  userId: string,
-  userNickname: string,
   content: string,
-  userProfilePicture: string
+  userId: string,
+  characterId?: string,
+  potionId?: string
 ) => {
   const commentsRef = collection(db, 'comments');
   const newComment = {
     characterId,
+    potionId,
     userId,
-    userNickname,
     content,
-    userProfilePicture,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   };
