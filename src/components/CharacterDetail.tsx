@@ -1,4 +1,6 @@
+import React from 'react';
 import { Character } from '../types';
+import CommentSection from '../components/CommentSection';
 
 interface CharacterDetailProps {
   character: Character;
@@ -6,6 +8,7 @@ interface CharacterDetailProps {
 }
 
 const CharacterDetail: React.FC<CharacterDetailProps> = ({ character, onClose }) => {
+  console.log('CharacterDetail rendering, character.id:', character.id);
   const getImageSrc = () => {
     if (character.image) return character.image;
     return character.wizard ? '/placeholder-wizard.png' : '/placeholder-muggle.png';
@@ -23,6 +26,7 @@ const CharacterDetail: React.FC<CharacterDetailProps> = ({ character, onClose })
       <p><strong>Date of Birth:</strong> {character.dateOfBirth || 'Unknown'}</p>
       <p><strong>Patronus:</strong> {character.patronus || 'Unknown'}</p>
       <p><strong>Wand:</strong> {character.wand?.wood ? `${character.wand.wood} wood, ${character.wand.core} core, ${character.wand.length} inches` : 'Unknown'}</p>
+      <CommentSection characterId={character.id} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useAppContext } from '../hooks/useAppContext';
 import { fetchCharacters } from '../services/api';
 import CharacterCard from '../components/CharacterCard';

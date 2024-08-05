@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore/lite";
+
 export interface Character {
   id: string;
   name: string;
@@ -61,4 +63,15 @@ export interface DailyData {
   character: Character;
   spell: Spell;
   date: string;
+}
+
+export interface Comment {
+  id: string;
+  characterId: string;
+  userId: string;
+  userNickname: string;
+  userProfilePicture: string;
+  content: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }

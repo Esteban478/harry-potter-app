@@ -1,6 +1,6 @@
 import { db } from '../config/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { Character, Spell, Options, DailyData } from '../types';
+import { collection, addDoc, getDocs, query, where, orderBy, Timestamp, deleteDoc, doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
+import { Character, Spell, Options, DailyData, Comment } from '../types';
 
 const API_BASE_URL = 'https://hp-api.onrender.com/api';
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -85,4 +85,67 @@ const generateNewDailyData = async (): Promise<DailyData> => {
     spell: randomSpell,
     date: new Date().toISOString().split('T')[0],
   };
+};
+
+export const addComment = async (
+  characterId: string,
+  userId: string,
+  userNickname: string,
+  content: string,
+  userProfilePicture: string
+) => {
+  const commentsRef = collection(db, 'comments');
+  const newComment = {
+    characterId,
+    userId,
+    userNickname,
+    content,
+    userProfilePicture,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+  };
+  return addDoc(commentsRef, newComment);
+};
+
+export const getComments = async (characterId: string): Promise<Comment[]> => {
+  console.log('getComments called with characterId:', characterId);
+  
+  const commentsRef = collection(db, 'comments');
+  console.log('commentsRef:', commentsRef);
+  
+  const q = query(
+    commentsRef,
+    where('characterId', '==', characterId),
+    orderBy('createdAt', 'desc')
+  );
+  console.log('query:', q);
+
+  try {
+    const querySnapshot = await getDocs(q);
+    console.log('querySnapshot:', querySnapshot);
+
+    const comments = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Comment));
+    
+    console.log('Mapped comments:', comments);
+    return comments;
+  } catch (error) {
+    console.error('Error in getComments:', error);
+    throw error;
+  }
+};
+
+export const updateComment = async (commentId: string, content: string) => {
+  const commentRef = doc(db, 'comments', commentId);
+  return updateDoc(commentRef, {
+    content,
+    updatedAt: Timestamp.now(),
+  });
+};
+
+export const deleteComment = async (commentId: string) => {
+  const commentRef = doc(db, 'comments', commentId);
+  return deleteDoc(commentRef);
 };

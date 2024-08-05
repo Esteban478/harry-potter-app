@@ -1,0 +1,21 @@
+.no-comments {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.no-comments p {
+    margin: 10px 0;
+}
+
+.no-comments a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.no-comments a:hover {
+    text-decoration: underline;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useUser } from '../hooks/useUserContext';
 import { useData } from '../hooks/useDataContext';
 import { Autocomplete } from '../components/Autocomplete';
