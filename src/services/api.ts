@@ -114,44 +114,64 @@ export const addComment = async (
   characterId?: string,
   potionId?: string
 ) => {
+  console.log('addComment called with:', { content, userId, characterId, potionId });
   const commentsRef = collection(db, 'comments');
-  const newComment = {
-    characterId,
-    potionId,
-    userId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newComment: any = {
     content,
+    userId,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   };
-  return addDoc(commentsRef, newComment);
+
+  if (characterId) {
+    newComment.characterId = characterId;
+  } else if (potionId) {
+    newComment.potionId = potionId;
+  } else {
+    throw new Error('Either characterId or potionId must be provided');
+  }
+
+  try {
+    const docRef = await addDoc(commentsRef, newComment);
+    console.log('Comment added with ID:', docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    throw error;
+  }
 };
 
-export const getComments = async (characterId: string): Promise<Comment[]> => {
-  console.log('getComments called with characterId:', characterId);
-  
+export const getComments = async (characterId?: string, potionId?: string): Promise<Comment[]> => {
+  console.log('getComments called with:', { characterId, potionId });
   const commentsRef = collection(db, 'comments');
-  console.log('commentsRef:', commentsRef);
-  
-  const q = query(
-    commentsRef,
-    where('characterId', '==', characterId),
-    orderBy('createdAt', 'desc')
-  );
-  console.log('query:', q);
+  let q;
+
+  if (characterId) {
+    q = query(
+      commentsRef,
+      where('characterId', '==', characterId),
+      orderBy('createdAt', 'desc')
+    );
+  } else if (potionId) {
+    q = query(
+      commentsRef,
+      where('potionId', '==', potionId),
+      orderBy('createdAt', 'desc')
+    );
+  } else {
+    console.error('Neither characterId nor potionId provided');
+    return [];
+  }
 
   try {
     const querySnapshot = await getDocs(q);
-    console.log('querySnapshot:', querySnapshot);
-
-    const comments = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as Comment));
-    
-    console.log('Mapped comments:', comments);
+    console.log('Query snapshot:', querySnapshot);
+    const comments = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Comment));
+    console.log('Parsed comments:', comments);
     return comments;
   } catch (error) {
-    console.error('Error in getComments:', error);
+    console.error('Error fetching comments:', error);
     throw error;
   }
 };

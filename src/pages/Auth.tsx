@@ -1,3 +1,4 @@
+// src/pages/Auth.tsx
 import { useState, useEffect } from 'react';
 import { auth } from '../config/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';

@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUserContext';
 import { addComment, getComments } from '../services/api';
 import Comment from './Comment';
+import NoComments from './NoComments';
 import { Comment as CommentType } from '../types';
-import '../styles/Comments.css';
 
 interface CommentSectionProps {
-  characterId: string;
+  characterId?: string;
+  potionId?: string;
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({ characterId, potionId }) => {
   const { userProfile } = useUser();
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -18,14 +19,18 @@ const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
 
   useEffect(() => {
     fetchComments();
-  }, [characterId]);
+  }, [characterId, potionId]);
 
   const fetchComments = async () => {
     try {
-      const fetchedComments = await getComments(characterId);
+      console.log('Fetching comments for:', characterId ? `character ${characterId}` : `potion ${potionId}`);
+      const fetchedComments = await getComments(characterId, potionId);
+      console.log('Fetched comments:', fetchedComments);
       setComments(fetchedComments);
       setLoading(false);
+      setError(null);
     } catch (err) {
+      console.error('Error fetching comments:', err);
       setError('Failed to load comments');
       setLoading(false);
     }
@@ -36,7 +41,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
     if (!userProfile) return;
 
     try {
-      await addComment(newComment, userProfile.uid, characterId);
+      await addComment(newComment, userProfile.uid, characterId, potionId);
       setNewComment('');
       fetchComments();
     } catch (err) {
@@ -61,13 +66,17 @@ const CommentSection: React.FC<CommentSectionProps> = ({ characterId }) => {
           <button type="submit">Post Comment</button>
         </form>
       )}
-      {comments.map((comment) => (
-        <Comment
-          key={comment.id}
-          comment={comment}
-          onUpdate={fetchComments}
-        />
-      ))}
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            onUpdate={fetchComments}
+          />
+        ))
+      ) : (
+        <NoComments />
+      )}
     </div>
   );
 };

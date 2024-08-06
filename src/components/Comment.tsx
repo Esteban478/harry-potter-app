@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUserContext';
 import { updateComment, deleteComment, fetchUserProfile } from '../services/api';
 import { Comment as CommentType, UserProfile } from '../types';
+import '../styles/Comments.css';
 
 interface CommentProps {
   comment: CommentType;

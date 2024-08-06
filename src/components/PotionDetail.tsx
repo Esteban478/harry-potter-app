@@ -1,4 +1,5 @@
 import { Potion } from '../types';
+import CommentSection from './CommentSection';
 
 interface PotionDetailProps {
   potion: Potion;
@@ -30,6 +31,7 @@ const PotionDetail: React.FC<PotionDetailProps> = ({ potion, onClose }) => {
       ) : (
         <p>No ingredients listed</p>
       )}
+      <CommentSection potionId={potion.id} />
     </div>
   );
 };
