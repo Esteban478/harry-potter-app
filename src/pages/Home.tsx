@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchDailyData } from '../services/api';
 import { Character, Spell, Potion } from '../types';
 import '../styles/Home.css';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [dailyCharacter, setDailyCharacter] = useState<Character | null>(null);
@@ -32,7 +33,7 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h1>Welcome to the Harry Potter World</h1>
+      <h1>Welcome to the Harry Potter Universe</h1>
       <div className="daily-section">
         {dailyCharacter && (
           <div className="character-of-the-day">
@@ -40,6 +41,7 @@ const Home = () => {
             <img src={dailyCharacter.image} alt={dailyCharacter.name} />
             <p><strong>Name:</strong> {dailyCharacter.name}</p>
             <p><strong>House:</strong> {dailyCharacter.house}</p>
+            <p><Link to="/characters">Show all characters</Link></p>
           </div>
         )}
         {dailySpell && (
@@ -47,6 +49,7 @@ const Home = () => {
             <h2>Spell of the Day</h2>
             <p><strong>Name:</strong> {dailySpell.name}</p>
             <p><strong>Description:</strong> {dailySpell.description}</p>
+            <p><Link to="/spellbook">Open the spellbook</Link></p>
           </div>
         )}
         {dailyPotion && (
@@ -57,6 +60,7 @@ const Home = () => {
             )}
             <p><strong>Name:</strong> {dailyPotion.attributes.name}</p>
             <p><strong>Effect:</strong> {dailyPotion.attributes.effect}</p>
+            <p><Link to="/potions">Show all potions</Link></p>
           </div>
         )}
       </div>

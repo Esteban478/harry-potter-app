@@ -25,7 +25,7 @@ const NavigationBar: React.FC = () => {
         {userProfile ? (
           <>
             <li><Link to="/profile">Profile</Link></li>
-            <li><button onClick={handleLogout}>Logout</button></li>
+            <li><Link to="/" onClick={handleLogout}>Logout</Link></li>
           </>
         ) : (
           <li><Link to="/auth">Login / Register</Link></li>
