@@ -1,4 +1,3 @@
-// src/pages/Auth.tsx
 import { useState, useEffect } from 'react';
 import { auth } from '../config/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -8,7 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import { getFirebaseErrorMessage } from '../utils/firebaseErrorHandler';
 
-const Auth = () => {
+const Auth: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
@@ -17,6 +16,10 @@ const Auth = () => {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [lastAttemptTime, setLastAttemptTime] = useState(Date.now());
   const navigate = useNavigate();
+
+  const handleAuthSuccess = () => {
+    navigate('/profile?prompt=complete');
+  };
 
   useEffect(() => {
     const cooldownPeriod = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -60,7 +63,7 @@ const Auth = () => {
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
-      navigate('/');
+      handleAuthSuccess();
     } catch (error) {
       setError(getFirebaseErrorMessage(error));
       if (isLogin) {

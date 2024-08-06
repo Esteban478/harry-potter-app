@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUser } from '../hooks/useUserContext';
 import { useData } from '../hooks/useDataContext';
+import { useLocation } from 'react-router-dom';
 import { Autocomplete } from '../components/Autocomplete';
 import { Select } from '../components/Select';
 import { createAvatar } from '@dicebear/core';
@@ -19,7 +20,8 @@ const MAX_DIMENSION = 1000;
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png'];
 
 const UserProfilePage: React.FC = () => {
-
+  const location = useLocation();
+  const showPrompt = new URLSearchParams(location.search).get('prompt') === 'complete';
   const { userProfile, updateUserProfile } = useUser();
   const { characters, spells, options, loading: dataLoading, error: dataError } = useData();
   const [editedProfile, setEditedProfile] = useState<Partial<UserProfile>>({});
@@ -197,6 +199,11 @@ const renderProfileImage = () => {
 
   return (
     <div className="user-profile">
+      {showPrompt && (
+        <div className="profile-completion-prompt">
+          Please complete your profile information.
+        </div>
+      )}
       <h1>User Profile</h1>
       <button onClick={toggleEditMode}>
         {editMode ? 'Cancel Edit' : 'Edit Profile'}
