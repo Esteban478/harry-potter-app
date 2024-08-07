@@ -20,6 +20,7 @@ const App: React.FC = () => {
           <AppProvider>
             <Router>
               <div className="app">
+                <div className="background-container"></div>
                 <NavigationBar />
                 <main>
                   <Routes>

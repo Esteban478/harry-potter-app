@@ -12,12 +12,14 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
   };
 
   return (
-    <div className="character-card">
+    <div className="card character-card">
       <img src={getImageSrc()} alt={character.name} />
-      <h3>{character.name}</h3>
-      <p>House: {character.house || 'Unknown'}</p>
-      <p>Actor: {character.actor}</p>
-      <p>{character.wizard ? 'Wizard' : 'Muggle'}</p>
+      <div className='card-content'>
+        <h3>{character.name}</h3>
+        <p>House: {character.house || 'Unknown'}</p>
+        <p>Actor: {character.actor}</p>
+        <p>{character.wizard ? 'Wizard' : 'Muggle'}</p>
+      </div>
     </div>
   );
 };

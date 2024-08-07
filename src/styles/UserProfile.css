@@ -1,3 +1,17 @@
+.user-profile-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 200px;
+    margin: 0 auto;
+    margin-bottom: 1.5rem;
+}
+
+.user-profile-heading svg {
+    font-size: 1.5rem;
+    color: var(--header-color);
+}
+
 .avatar-section {
     display: flex;
     flex-direction: column;

@@ -1,81 +1,77 @@
-/* src/styles/Home.css */
-.home {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
 .home h1 {
-    color: #740001;
-    /* Gryffindor red */
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 1rem;
 }
 
-.daily-section {
+.daily-items {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin-top: 30px;
+    gap: 2rem;
 }
 
-.character-of-the-day,
-.spell-of-the-day,
-.potion-of-the-day {
-    width: 31%;
-    /* Changed from 48% to accommodate three items */
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+.daily-item {
+    width: calc(33.333% - 1.5rem);
+    height: 640px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.character-of-the-day {
-    background-color: #eeba30;
-    /* Hufflepuff yellow */
+.daily-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.spell-of-the-day {
-    background-color: #222f5b;
-    /* Ravenclaw blue */
-    color: white;
+.daily-item img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
 }
 
-.potion-of-the-day {
-    background-color: #1a472a;
-    /* Slytherin green */
-    color: white;
+.daily-item-content {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
 }
 
-.character-of-the-day h2,
-.spell-of-the-day h2,
-.potion-of-the-day h2 {
-    color: inherit;
+.daily-item-content .category-link {
+    align-self: baseline;
+}
+
+.daily-item h2 {
+    font-size: 1.5rem;
     margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--gryffindor-gold);
 }
 
-.character-of-the-day img,
-.potion-of-the-day img {
-    max-width: 100%;
-    border-radius: 5px;
-    margin-bottom: 10px;
+.daily-item p {
+    margin-bottom: 0.5rem;
 }
 
-.character-of-the-day p,
-.spell-of-the-day p,
-.potion-of-the-day p {
-    margin: 5px 0;
+.daily-item a {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--gryffindor-gold);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.daily-item a:hover {
+    color: var(--hufflepuff-yellow);
 }
 
 @media (max-width: 768px) {
-    .daily-section {
+    .daily-items {
         flex-direction: column;
     }
 
-    .character-of-the-day,
-    .spell-of-the-day,
-    .potion-of-the-day {
+    .daily-item {
         width: 100%;
-        margin-bottom: 20px;
     }
 }

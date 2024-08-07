@@ -1,7 +1,9 @@
 .navigation-bar {
-    background-color: #1a472a;
-    /* Slytherin green */
+    background-color: rgba(11, 29, 59, 0.8);
+    /* Darker, semi-transparent version of your background start color */
     padding: 1rem;
+    backdrop-filter: blur(5px);
+    /* This creates a frosted glass effect */
 }
 
 .navigation-bar ul {
@@ -17,14 +19,17 @@
 }
 
 .navigation-bar a {
-    color: #fff;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: bold;
     font-size: 1.1rem;
     transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
 }
 
-.navigation-bar a:hover {
-    color: #ffd700;
-    /* Gold */
+.navigation-bar a:hover,
+.navigation-bar a.active {
+    color: var(--gryffindor-gold);
+    background-color: rgba(255, 255, 255, 0.1);
 }

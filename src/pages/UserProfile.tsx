@@ -13,6 +13,8 @@ import '../styles/General.css';
 import '../styles/UserProfile.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faPencil} from '@fortawesome/free-solid-svg-icons';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const MIN_DIMENSION = 200;
@@ -201,13 +203,18 @@ const renderProfileImage = () => {
     <div className="user-profile">
       {showPrompt && (
         <div className="profile-completion-prompt">
-          Please complete your profile information.
+          Please complete your profile information first.
         </div>
       )}
-      <h1>User Profile</h1>
-      <button onClick={toggleEditMode}>
-        {editMode ? 'Cancel Edit' : 'Edit Profile'}
-      </button>
+      <div className="user-profile-heading">
+        <h1>
+          User Profile
+        </h1>
+        <FontAwesomeIcon
+          onClick={toggleEditMode}
+          icon={editMode ? faTimes : faPencil}
+        />
+      </div>
       <div className="avatar-section">
         {renderProfileImage()}
         {editMode && (

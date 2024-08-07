@@ -43,7 +43,7 @@ const Spellbook: React.FC = () => {
       {loading ? (
         <p>Loading spells...</p>
       ) : (
-        <div className="spell-grid">
+        <div className="spells-grid">
           {filteredSpells.map((spell) => (
             <SpellCard key={spell.id} spell={spell} />
           ))}
