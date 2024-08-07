@@ -8,6 +8,10 @@
     margin-bottom: 1rem;
 }
 
+.auth-page form input {
+    width: 100%;
+}
+
 .auth-buttons {
     display: flex;
     justify-content: space-between;
