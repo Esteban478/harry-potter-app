@@ -96,15 +96,17 @@ const Auth: React.FC = () => {
             />
             {!isLogin && password.length > 0 && <PasswordStrengthMeter password={password} />}
             <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
-          </form>
-          <button onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? 'Need to register?' : 'Already have an account?'}
-          </button>
-          {isLogin && (
-            <button onClick={() => setShowPasswordReset(true)}>
-              Forgot Password?
-            </button>
-          )}
+            </form>
+            <div className="auth-buttons">
+              <button onClick={() => setIsLogin(!isLogin)}>
+                {isLogin ? 'Need to register?' : 'Already have an account?'}
+              </button>
+              {isLogin && (
+                <button onClick={() => setShowPasswordReset(true)}>
+                  Forgot Password?
+                </button>
+              )}
+            </div>
           {error && <ErrorMessage message={error} />}
         </>
       ) : (

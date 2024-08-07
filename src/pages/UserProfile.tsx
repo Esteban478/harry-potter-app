@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUser } from '../hooks/useUserContext';
 import { useData } from '../hooks/useDataContext';
-import { useLocation } from 'react-router-dom';
 import { Autocomplete } from '../components/Autocomplete';
 import { Select } from '../components/Select';
 import { createAvatar } from '@dicebear/core';
@@ -9,20 +8,17 @@ import { adventurer } from '@dicebear/collection';
 import { UserProfile } from '../types';
 import { getOrdinalSuffix } from '../utils/getOrdinalSuffix';
 import { MAX_DIMENSION, MAX_FILE_SIZE, MIN_DIMENSION, uploadImage, validateFile } from '../utils/imageUpload';
-import '../styles/General.css';
-import '../styles/UserProfile.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faPencil} from '@fortawesome/free-solid-svg-icons';
+import '../styles/General.css';
+import '../styles/UserProfile.css';
 
 const UserProfilePage: React.FC = () => {
-  const location = useLocation();
-  const showPrompt = new URLSearchParams(location.search).get('prompt') === 'complete';
   const { userProfile, updateUserProfile } = useUser();
   const { characters, potions, spells, options, loading: dataLoading, error: dataError } = useData();
   const [editedProfile, setEditedProfile] = useState<Partial<UserProfile>>({});
-  const [avatarSeed, setAvatarSeed] = useState('');
   const [avatarSvg, setAvatarSvg] = useState('');
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -34,17 +30,9 @@ const UserProfilePage: React.FC = () => {
   useEffect(() => {
     if (userProfile) {
       setEditedProfile(userProfile);
-      setAvatarSeed(userProfile.profilePicture || '');
       setLoading(false);
     }
   }, [userProfile]);
-
-  useEffect(() => {
-    if (avatarSeed) {
-      const avatar = createAvatar(adventurer, { seed: avatarSeed });
-      setAvatarSvg(avatar.toDataUri());
-    }
-  }, [avatarSeed]);
 
   const handleInputChange = (name: keyof UserProfile, value: unknown) => {
     setEditedProfile(prev => ({ ...prev, [name]: value }));
@@ -55,8 +43,9 @@ const UserProfilePage: React.FC = () => {
   };
 
   const generateNewAvatar = () => {
-    const newSeed = Math.random().toString(36).substring(9);
-    setAvatarSeed(newSeed);
+    const avatarSeed = Math.random().toString(36).substring(9);
+    const avatar = createAvatar(adventurer, { seed: avatarSeed });
+    setAvatarSvg(avatar.toDataUri());
     setImagePreview(null);
     setUploadedImage(null);
     setEditedProfile(prev => ({ ...prev, profilePicture: null }));
@@ -109,7 +98,6 @@ const toggleEditMode = () => {
   if (editMode) {
     // Reset to original profile when cancelling edit
     setEditedProfile(userProfile || {});
-    setAvatarSeed(userProfile?.profilePicture || '');
     setImagePreview(null);
     setUploadedImage(null);
     clearError(); // Clear any error messages
@@ -133,11 +121,6 @@ const renderProfileImage = () => {
 
   return (
     <div className="user-profile">
-      {showPrompt && (
-        <div className="profile-completion-prompt">
-          Please complete your profile information first.
-        </div>
-      )}
       <div className="user-profile-heading">
         <h1>
           User Profile

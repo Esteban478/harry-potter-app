@@ -1,17 +1,16 @@
 .navigation-bar {
     background-color: rgba(11, 29, 59, 0.8);
-    /* Darker, semi-transparent version of your background start color */
     padding: 1rem;
     backdrop-filter: blur(5px);
-    /* This creates a frosted glass effect */
 }
 
 .navigation-bar ul {
+    max-width: 1200px;
     list-style-type: none;
-    padding: 0;
-    margin: 0;
+    padding: 0 1.5rem;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .navigation-bar li {

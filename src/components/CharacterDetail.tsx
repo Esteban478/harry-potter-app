@@ -8,10 +8,9 @@ interface CharacterDetailProps {
 }
 
 const CharacterDetail: React.FC<CharacterDetailProps> = ({ character, onClose }) => {
-  console.log('CharacterDetail rendering, character.id:', character.id);
   const getImageSrc = () => {
     if (character.image) return character.image;
-    return character.wizard ? '/placeholder-wizard.png' : '/placeholder-muggle.png';
+    return character.wizard ? '/placeholder-wizard.jpg' : '/placeholder-muggle.jpg';
   };
 
   return (

@@ -19,6 +19,7 @@
     position: absolute;
     top: 30px;
     right: 30px;
+    margin: 0;
     font-size: 24px;
     background: none;
     border: none;
@@ -28,7 +29,8 @@
 }
 
 .close-button:hover {
-    color: var(--gryffindor-red);
+    color: var(--gryffindor-gold);
+    background-color: var(--gryffindor-red);
 }
 
 .character-image,

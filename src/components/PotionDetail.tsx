@@ -14,9 +14,7 @@ const PotionDetail: React.FC<PotionDetailProps> = ({ potion, onClose }) => {
   return (
     <div className="potion-detail">
       <button onClick={onClose} className="close-button">×</button>
-      {potion.attributes.image && (
-        <img src={potion.attributes.image} alt={potion.attributes.name} className="potion-image" />
-      )}
+      <img src={potion.attributes.image ? potion.attributes.image : '/placeholder-potion.jpg'} alt={potion.attributes.name} className="potion-image" />
       <h2>{potion.attributes.name || 'Unknown Potion'}</h2>
       <p><strong>Effect:</strong> {potion.attributes.effect || 'Unknown'}</p>
       <p><strong>Difficulty:</strong> {potion.attributes.difficulty || 'Unknown'}</p>
