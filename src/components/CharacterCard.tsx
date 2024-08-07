@@ -18,7 +18,6 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
         <h3>{character.name}</h3>
         <p>House: {character.house || 'Unknown'}</p>
         <p>Actor: {character.actor}</p>
-        <p>{character.wizard ? 'Wizard' : 'Muggle'}</p>
       </div>
     </div>
   );

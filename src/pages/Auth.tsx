@@ -6,6 +6,7 @@ import PasswordReset from '../components/PasswordReset';
 import ErrorMessage from '../components/ErrorMessage';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import { getFirebaseErrorMessage } from '../utils/firebaseErrorHandler';
+import '../styles/AuthPage.css';
 
 const Auth: React.FC = () => {
   const [email, setEmail] = useState('');

@@ -17,8 +17,8 @@
 
 .close-button {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 30px;
+    right: 30px;
     font-size: 24px;
     background: none;
     border: none;
@@ -28,13 +28,16 @@
 }
 
 .close-button:hover {
-    color: var(--gryffindor-gold);
+    color: var(--gryffindor-red);
 }
 
 .character-image,
 .potion-image {
     max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: top;
     margin-bottom: 20px;
     border-radius: 8px;
 }

@@ -41,6 +41,7 @@ export interface UserProfile {
   favoriteHouse: string | null;
   favoriteSpell: string | null;
   favoriteCharacter: string | null;
+  favoritePotion: string | null;
   wandCore: string | null;
   wandWood: string | null;
   wandLength: number | null;

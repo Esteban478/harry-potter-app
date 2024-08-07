@@ -1,0 +1,9 @@
+.auth-page {
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.auth-page h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}

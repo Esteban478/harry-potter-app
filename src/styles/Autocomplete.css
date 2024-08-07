@@ -16,7 +16,7 @@
     right: 0;
     max-height: 200px;
     overflow-y: auto;
-    background-color: white;
+    background-color: rgb(32, 32, 32);
     border: 1px solid #ccc;
     border-top: none;
     border-radius: 0 0 4px 4px;
@@ -33,5 +33,5 @@
 
 .autocomplete .options li:hover,
 .autocomplete .options li.selected {
-    background-color: #f0f0f0;
+    background-color: rgb(64, 64, 64);
 }

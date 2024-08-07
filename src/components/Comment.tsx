@@ -67,7 +67,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onUpdate }) => {
           ) : (
             <>
               <button onClick={() => setIsEditing(true)}>Edit</button>
-              <button onClick={handleDelete}>Delete</button>
+              <button className='delete' onClick={handleDelete}>Delete</button>
             </>
           )}
         </div>

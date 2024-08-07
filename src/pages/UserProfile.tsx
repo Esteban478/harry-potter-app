@@ -8,7 +8,7 @@ import { createAvatar } from '@dicebear/core';
 import { adventurer } from '@dicebear/collection';
 import { UserProfile } from '../types';
 import { getOrdinalSuffix } from '../utils/getOrdinalSuffix';
-import { uploadImage } from '../utils/imageUpload';
+import { MAX_DIMENSION, MAX_FILE_SIZE, MIN_DIMENSION, uploadImage, validateFile } from '../utils/imageUpload';
 import '../styles/General.css';
 import '../styles/UserProfile.css';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -16,16 +16,11 @@ import ErrorMessage from '../components/ErrorMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faPencil} from '@fortawesome/free-solid-svg-icons';
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-const MIN_DIMENSION = 200;
-const MAX_DIMENSION = 1000;
-const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png'];
-
 const UserProfilePage: React.FC = () => {
   const location = useLocation();
   const showPrompt = new URLSearchParams(location.search).get('prompt') === 'complete';
   const { userProfile, updateUserProfile } = useUser();
-  const { characters, spells, options, loading: dataLoading, error: dataError } = useData();
+  const { characters, potions, spells, options, loading: dataLoading, error: dataError } = useData();
   const [editedProfile, setEditedProfile] = useState<Partial<UserProfile>>({});
   const [avatarSeed, setAvatarSeed] = useState('');
   const [avatarSvg, setAvatarSvg] = useState('');
@@ -66,69 +61,6 @@ const UserProfilePage: React.FC = () => {
     setUploadedImage(null);
     setEditedProfile(prev => ({ ...prev, profilePicture: null }));
     clearError();
-  };
-
-  const checkMagicNumbers = (file: File): Promise<boolean> => {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onloadend = function(e) {
-      if (e.target?.readyState === FileReader.DONE) {
-        const arr = new Uint8Array(e.target.result as ArrayBuffer).subarray(0, 4);
-        let header = '';
-        for (let i = 0; i < arr.length; i++) {
-          header += arr[i].toString(16);
-        }
-        // Check for JPEG or PNG headers
-        const isValid = header.startsWith('ffd8') || header === '89504e47';
-        resolve(isValid);
-      }
-    };
-    reader.readAsArrayBuffer(file.slice(0, 4));
-    });
-  };
-
-  const validateFile = async (file: File): Promise<boolean> => {
-    // Check file type
-    if (!ALLOWED_FILE_TYPES.includes(file.type.toLowerCase())) {
-      console.log('Invalid file type');
-      return false;
-    }
-
-    // Check magic numbers
-    const isValidMagicNumber = await checkMagicNumbers(file);
-    if (!isValidMagicNumber) {
-      console.log('Invalid file content');
-      return false;
-    }
-
-    // Check file size
-    if (file.size > MAX_FILE_SIZE) {
-      console.log('File too large');
-      return false;
-    }
-
-    // Check image dimensions
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        const img = new Image();
-        img.src = e.target?.result as string;
-        img.onload = () => {
-          const isValidDimensions = 
-            img.width >= MIN_DIMENSION &&
-            img.height >= MIN_DIMENSION &&
-            img.width <= MAX_DIMENSION &&
-            img.height <= MAX_DIMENSION;
-          
-          if (!isValidDimensions) {
-            console.log('Invalid image dimensions');
-          }
-          
-          resolve(isValidDimensions);
-        };
-      };
-    });
   };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -257,6 +189,17 @@ const renderProfileImage = () => {
           />
         </div>
         <div>
+          <label htmlFor="favoritePotion">Favorite Potion:</label>
+          <Autocomplete
+            options={potions.map(potion => ({ name: potion.attributes.name, id: potion.id }))}
+            labelKey="name"
+            valueKey="id"
+            onChange={(value) => handleInputChange('favoritePotion', value?.name)}
+            placeholder="Select a potion"
+            value={editedProfile.favoritePotion ? { name: editedProfile.favoritePotion, id: editedProfile.favoritePotion } : null}
+          />
+        </div>
+        <div>
           <label htmlFor="favoriteSpell">Favorite Spell:</label>
           <Autocomplete
             options={spells.map(spell => ({ name: spell.name, id: spell.id }))}
@@ -349,6 +292,7 @@ const renderProfileImage = () => {
         <div className="profile-info">
           <p><strong>Nickname:</strong> {userProfile?.nickname || 'Not set'}</p>
           <p><strong>Favorite Character:</strong> {userProfile?.favoriteCharacter || 'Not set'}</p>
+          <p><strong>Favorite Potion:</strong> {userProfile?.favoritePotion || 'Not set'}</p>
           <p><strong>Favorite Spell:</strong> {userProfile?.favoriteSpell || 'Not set'}</p>
           <p><strong>Wand Core:</strong> {userProfile?.wandCore || 'Not set'}</p>
           <p><strong>Wand Wood:</strong> {userProfile?.wandWood || 'Not set'}</p>

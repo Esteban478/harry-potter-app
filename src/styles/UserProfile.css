@@ -16,16 +16,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .avatar-section img {
-    max-width: 420px;
-    margin-bottom: 20px;
+    max-width: 300px;
+}
+
+.profile-image-buttons {
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
 }
 
 .profile-info {
-    max-width: fit-content;
+    max-width: 300px;
     margin: 0 auto;
 }
 
@@ -37,7 +43,7 @@
 
 .user-profile form,
 .error-message {
-    max-width: 420px;
+    max-width: 300px;
     margin: 0 auto 20px;
 }
 
@@ -70,7 +76,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 10px;
+    margin: 0;
 }
 
 .user-profile button:hover {

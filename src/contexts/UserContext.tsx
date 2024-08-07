@@ -30,6 +30,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             favoriteHouse: null,
             favoriteSpell: null,
             favoriteCharacter: null,
+            favoritePotion: null,
             wandCore: null,
             wandWood: null,
             wandLength: null,
