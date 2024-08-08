@@ -4,6 +4,7 @@ import { addComment, getComments } from '../services/api';
 import Comment from './Comment';
 import NoComments from './NoComments';
 import { Comment as CommentType } from '../types';
+import '../styles/CommentSection.css';
 
 interface CommentSectionProps {
   characterId?: string;

@@ -19,7 +19,7 @@ const Auth: React.FC = () => {
   const navigate = useNavigate();
 
   const handleAuthSuccess = () => {
-    navigate('/profile?prompt=complete');
+    navigate('/profile');
   };
 
   useEffect(() => {
