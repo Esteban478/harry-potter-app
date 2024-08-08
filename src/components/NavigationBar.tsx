@@ -60,6 +60,7 @@ const NavigationBar: React.FC = () => {
       <li><Link to="/characters" onClick={() => setMobileMenuOpen(false)}>Characters</Link></li>
       <li><Link to="/potions" onClick={() => setMobileMenuOpen(false)}>Potions</Link></li>
       <li><Link to="/spellbook" onClick={() => setMobileMenuOpen(false)}>Spellbook</Link></li>
+      {!userProfile ? <li><Link to="/auth" className="login-link">Login / Register</Link></li> : null }
     </>
   );
 
@@ -107,6 +108,39 @@ const NavigationBar: React.FC = () => {
       </div>
       <ul className="desktop-nav">
         {navLinks}
+        {userProfile && 
+          <div className="user-menu">
+            <div 
+              onMouseEnter={openDropdown}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="avatar-container"
+            >
+              <img 
+                src={userProfile.profilePicture || '/placeholder-avatar.jpg'} 
+                alt={`${userProfile.nickname || 'User'}'s avatar`}
+                className="nav-avatar"
+              />
+            </div>
+            {dropdownOpen && (
+              <div className="dropdown-menu" ref={dropdownRef}>
+                <Link 
+                  to="/profile" 
+                  onClick={(e) => {
+                    if (isProfilePage) {
+                      e.preventDefault();
+                    } else {
+                      setDropdownOpen(false);
+                    }
+                  }}
+                  className={isProfilePage ? 'disabled' : ''}
+                >
+                  Profile
+                </Link>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        }
       </ul>
       {mobileMenuOpen && (
         <div className="mobile-menu-overlay" ref={mobileMenuRef}>

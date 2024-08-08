@@ -85,6 +85,10 @@
     pointer-events: none;
 }
 
+.mobile-menu-overlay {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .navigation-bar {
         padding: 0.25rem 0.75rem;
@@ -127,6 +131,7 @@
     }
 
     .mobile-menu-overlay {
+        display: block;
         position: fixed;
         top: 0;
         left: 0;
