@@ -54,3 +54,19 @@
 .potion-detail p {
     margin-bottom: 10px;
 }
+
+@media (max-width: 480px) {
+    .close-button {
+        font-size: 3rem;
+        top: -16px;
+        right: 0;
+        color: var(--gryffindor-gold);
+    }
+
+    .character-detail,
+    .potion-detail {
+        width: 100%;
+        height: 100%;
+        max-height: 90%;
+    }
+}

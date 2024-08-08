@@ -5,12 +5,12 @@ import { getStorage } from 'firebase/storage';
 
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyAlclcqRfQSC0XoGN0dAmERg3D_I9BS4Cs",
+  authDomain: "harry-potter-characters-6c424.firebaseapp.com",
+  projectId: "harry-potter-characters-6c424",
+  storageBucket: "harry-potter-characters-6c424.appspot.com",
+  messagingSenderId: "590537532191",
+  appId: "1:590537532191:web:589b5baca7d87b05bec62a"
 };
 
 const app = initializeApp(firebaseConfig);

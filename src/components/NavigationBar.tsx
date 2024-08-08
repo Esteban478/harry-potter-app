@@ -3,12 +3,17 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../hooks/useUserContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../styles/NavigationBar.css';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 
 const NavigationBar: React.FC = () => {
   const { userProfile } = useUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,6 +21,7 @@ const NavigationBar: React.FC = () => {
     try {
       await signOut(auth);
       setDropdownOpen(false);
+      setMobileMenuOpen(false);
       navigate('/');
     } catch (error) {
       console.error('Failed to log out', error);
@@ -26,10 +32,17 @@ const NavigationBar: React.FC = () => {
     setDropdownOpen(true);
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
       }
     };
 
@@ -41,15 +54,23 @@ const NavigationBar: React.FC = () => {
 
   const isProfilePage = location.pathname === '/profile';
 
+  const navLinks = (
+    <>
+      <li><Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link></li>
+      <li><Link to="/characters" onClick={() => setMobileMenuOpen(false)}>Characters</Link></li>
+      <li><Link to="/potions" onClick={() => setMobileMenuOpen(false)}>Potions</Link></li>
+      <li><Link to="/spellbook" onClick={() => setMobileMenuOpen(false)}>Spellbook</Link></li>
+    </>
+  );
+
   return (
     <nav className="navigation-bar">
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/characters">Characters</Link></li>
-        <li><Link to="/potions">Potions</Link></li>
-        <li><Link to="/spellbook">Spellbook</Link></li>
+      <div className="mobile-nav">
+        <button className="hamburger-menu" onClick={toggleMobileMenu}>
+          <FontAwesomeIcon icon={faBars} />
+        </button>
         {userProfile ? (
-          <li className="user-menu">
+          <div className="user-menu">
             <div 
               onMouseEnter={openDropdown}
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -79,11 +100,26 @@ const NavigationBar: React.FC = () => {
                 <button onClick={handleLogout}>Logout</button>
               </div>
             )}
-          </li>
+          </div>
         ) : (
-          <li><Link to="/auth">Login / Register</Link></li>
+          <Link to="/auth" className="login-link">Login / Register</Link>
         )}
+      </div>
+      <ul className="desktop-nav">
+        {navLinks}
       </ul>
+      {mobileMenuOpen && (
+        <div className="mobile-menu-overlay" ref={mobileMenuRef}>
+        <FontAwesomeIcon
+          className="close-button"
+          onClick={toggleMobileMenu}
+          icon={faTimes}
+        />
+          <ul className="mobile-menu">
+            {navLinks}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

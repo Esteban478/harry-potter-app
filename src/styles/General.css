@@ -93,12 +93,6 @@ h3 {
     overflow: hidden;
 }
 
-.card:hover {
-    cursor: pointer;
-    transform: translateY(-5px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
 .card-content {
     padding: 1.5rem;
 }
@@ -112,10 +106,6 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: var(--ravenclaw-bronze);
 }
 
 input,
@@ -150,9 +140,34 @@ textarea {
     margin-bottom: 10px;
 }
 
+@media (hover: hover) {
+    .card:hover {
+        cursor: pointer;
+        transform: translateY(-5px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+    button:hover {
+        background-color: var(--ravenclaw-bronze);
+    }
+}
+
+@media (max-width: 480px) {
+    input,
+    select,
+    textarea {
+        width: 100%;
+    }
+}
+
 @media (max-width: 768px) {
     main {
-        padding: 10px;
+        padding: 0 1.5rem;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 80%;
     }
 
     .background-container {
