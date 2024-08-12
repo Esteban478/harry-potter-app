@@ -24,6 +24,7 @@ const UserProfilePage: React.FC = () => {
   const [editMode, setEditMode] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const avatarPlaceholder = "placeholder-avatar.jpg"
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,7 +113,7 @@ const renderProfileImage = () => {
   } else if (avatarSvg) {
     return <img src={avatarSvg} alt="Generated avatar" className="profile-image" />;
   } else {
-    return <div>No image available</div>;
+    return <img src={avatarPlaceholder} alt="Avatar placeholder" className="profile-image" />;
   }
 };
 
